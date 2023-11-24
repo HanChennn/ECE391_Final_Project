@@ -1,3 +1,12 @@
+# ECE391_Final_Project
+
+Groupmates: Han Chen, Shubh Gupta, Aditi, Vik
+
+In this machine problem, you will work in teams to develop the core of an operating system. We will provide you with code that boots you into protected mode, sets up the GDT, LDT, and initial TSS, and maps a read-only file system image into physical memory for you. You must set up the interrupt descriptor table (IDT), basic paging support for tasks, separate 4 MB pages for the kernel and applications, initialize a few devices, write the system call interface along with ten system calls, provide support for six tasks from program images in the file system which interface with the kernel via system calls, multiple terminals and basic scheduling.
+
+The goal for the assignment is to provide you with hands-on experience in developing the software used to interface between devices and applications, i.e., operating systems. We have deliberately simplified many of the interfaces to reduce the level of effort necessary to complete the project, but we hope that you will leave the class with the skills necessary to extend the implementation that you develop here along whatever direction you choose by incrementally improving various aspects of your system.
+
+
 ACADEMIC INTEGRITY
 -----
 Please review the University of Illinois Student Code before starting,
@@ -68,4 +77,4 @@ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE
 PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND NEITHER THE AUTHOR NOR
 THE UNIVERSITY OF ILLINOIS HAS ANY OBLIGATION TO PROVIDE MAINTENANCE,
 SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
-# ECE391_Final_Project
+
