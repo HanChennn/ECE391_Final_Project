@@ -1,0 +1,71 @@
+## Oct 13th 
+    (1) When initializing the GDT, the system was boot looping, so we realized our GDT initialize was incorrect, due to the padding not taken into account. After that fix, 
+        the system was booting as intended. Finding the bug took 30 mins, as we only had to comment out some kernel code to find it. Fixing it only took 3 lines of code, and was 
+        fixed within 5 mins, as we could compare it to the idt intialization code.  
+
+## Oct 15th
+    (2) First i include the header file #include “paging.h” in paging.S file, which is unnecessary and causes the assembly code crash. 
+        Besides, i wrote #include “paging.c” in the paging.h, and wrote #include “paging.h” in paging .c. This causes that two files copy each other, making the file excessively large.
+
+        Fixed: we only need to add #include “paging.h” in paging.c file.
+
+    (3) The RTC was not triggering interrupts as intended. TAs had told us what the intended output of the RTC is suppose to be. After comparing with our Keyboard interrupt, we realized 
+        that we forgot to make an assembly handler for the RTC, so it was not working as intended. The fix took 10 lines of code, but took an hour and a half to find. 
+
+## Oct 16th
+    (4) It is a misunderstanding not a bug. We only need to initialize the table pointing to video memory and the directory pointing to 4MB pages, instead of all 4GB pages.
+
+## Oct. 20th
+    (5) verylargetextwithverylongname.txt
+        For comparing and open file, we need to take care that this file name exceeds 32 length. If we simply use printf to print out its name, there will be a smile character behind it. This is because printf will stop only when meeting the \0, so it will keeps going to the next memory space and print out the smile face.
+        Therefore, i write my own compare function to only compare at most 32 characters. 
+
+## Oct. 20th
+    (6) file_open(“frame0.txt”);
+	There is a warning.
+	The reason of this is, in c, the string is stored as char array which is counted as int8_t type, but the parameter type should be uint8_t as required, so we need to add some casting when we process the function.
+
+## Oct. 21th
+    (7) For testing cases, we need to separate them into functions.
+	I did not set set test cases for read_dentry_by_index, because i will call this function when i use read_dentry_by_name. If that works, it means both of two functions works well.
+
+## Nov. 5th
+    (8) In sys_execute(), we update the pid first and then check whether the filename is valid. This is incorrect. After checking, for invalid filenames, we will simply return from the sys_execute, but pid is changed now. In this case, the start address of pcd is always messy which will
+	cause page fault and overwrite the kernal code.
+	Therefore, the sequence should be 1. check the validity of filename 2. update pid info 3. update pcb...
+
+## Nov. 5th
+    (9) In sys_halt(), the status parameter is an uint8_t, but the register in assembly code is 32 bits, so we actually need to cast the status to a 32-bit number and then use movl to pass the number.
+
+## Nov. 5th
+    (10) In the sys_halt(), after restoring saved_esp, saved_ebp and eax, we should "leave" and then ret. 
+	 At first, i didn't leave, which causes the page fault, this is because the stack of wrapper for sys_execute("ls") is not torn down.
+	 leave command will tear down all stack in the later part and return back to the first sys_execute() stack.
+
+## Nov. 13th
+    (11) In system_execute(), after compiling and running qemu, instead of just shell being printed out, it would print shell and additional garbage, for example shelln@5. 
+    You need to make sure to create two temp variables that take into consideration the start and end of both the commands and arguments and then parse through those.
+
+## Nov. 13th
+    (12) Due to get_args(), it was not printing what we intended because it was returning -1 and returning -1 printing a separate statement that we did not want. 
+    We had to make sure we were returning the value 0 at the end of the get_args() function so that we will get the right output after entering cat, grep, etc.
+
+## Nov. 13th
+    (13) We were getting a page fault after compiling and running qemu. We realized it was because we were re-initialzing a pcb value within our code which we were not meaning to do. 
+    We made sure to change the line of code to have the right value being inputted into the pcb by using the strcpy function.
+
+## Nov. 13th
+    (14) strncpy will not add an '\0' in the end, we need to manually add it
+
+## Nov. 26th
+    (15) The terminal shows up with really random color and characters. The reason is: there is only 4kb for the showing terminal instead of 8kb
+
+## Nov. 26th
+    (16) When we change the paging, and try to copy the old terminal to its backup address, it is still showing the old one and looks weird. The reason is that we need to flush TLB. If we don't do that, the terminal will use TLB and directly get the old physical address.
+
+## Nov. 26th
+    (17) When we pingpong in one file, other terminal shows the newline as well so it is keeping scrolling down. Fixed: we need to use three sets of variables to save cursor places for showing terminals.
+
+## Dec. 04th
+    (18) When we were testing the right shifting, we found that it was not working. We realized that the alt_pressed variable label that we have had the same value as the right shift pressed label that we had. We updated the alt pressed scan code to make sure we were using the right one and that it did not overlap with the right shift scancode. 
+
